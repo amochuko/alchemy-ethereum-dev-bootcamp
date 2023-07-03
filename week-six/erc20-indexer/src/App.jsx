@@ -1,7 +1,18 @@
 // @ts-nocheck
-import { Box, Button, Center,Flex, Heading, Input, Image, SimpleGrid, Text } from '@chakra-ui/react';
-import { Alchemy, Network , Utils, } from 'alchemy-sdk';
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Heading,
+  Image,
+  Input,
+  SimpleGrid,
+  Text,
+} from '@chakra-ui/react';
+import { Utils } from 'alchemy-sdk';
 import React, { useState } from 'react';
+import { GetNFT } from './nft';
 
 function App() {
   const [userAddress, setUserAddress] = useState('');
@@ -10,11 +21,6 @@ function App() {
   const [tokenDataObjects, setTokenDataObjects] = useState([]);
 
   async function getTokenBalance() {
-    const alchemy = new Alchemy({
-      apiKey: 'MoDN4j8xSEQk4Mf7N3vbO8hZvsE3mIKW',
-      network: Network.ETH_MAINNET,
-    });
-
     const data = await alchemy.core.getTokenBalances(userAddress);
 
     setResults(data);
@@ -34,77 +40,85 @@ function App() {
   }
 
   return (
-    <Box w='100vw'>
-      <Center>
+    <>
+      <GetNFT />
+      {/* <Box w='100vw'>
+        <Center>
+          <Flex
+            alignItems={'center'}
+            justifyContent='center'
+            flexDirection={'column'}
+          >
+            <Heading mb={0} fontSize={36}>
+              ERC-20 Token Indexer
+            </Heading>
+            <Text>
+              Plug in an address and this website will return all of its ERC-20
+              token balances!
+            </Text>
+          </Flex>
+        </Center>
         <Flex
-          alignItems={'center'}
-          justifyContent='center'
-          flexDirection={'column'}
+          w='100%'
+          flexDirection='column'
+          alignItems='center'
+          justifyContent={'center'}
         >
-          <Heading mb={0} fontSize={36}>
-            ERC-20 Token Indexer
+          <Heading mt={42}>
+            Get all the ERC-20 token balances of this address:
           </Heading>
-          <Text>
-            Plug in an address and this website will return all of its ERC-20
-            token balances!
-          </Text>
+          <Input
+            onChange={(e) => setUserAddress(e.target.value)}
+            color='black'
+            w='600px'
+            textAlign='center'
+            p={4}
+            bgColor='white'
+            fontSize={24}
+          />
+          <Button
+            fontSize={20}
+            onClick={getTokenBalance}
+            mt={36}
+            bgColor='blue'
+          >
+            Check ERC-20 Token Balances
+          </Button>
+
+          <Heading my={36}>ERC-20 token balances:</Heading>
+
+          {hasQueried ? (
+            <SimpleGrid w={'90vw'} columns={4} spacing={24}>
+              {results.tokenBalances.map((e, i) => {
+                return (
+                  <Flex
+                    flexDir={'column'}
+                    color='white'
+                    bg='blue'
+                    w={'20vw'}
+                    key={i}
+                  >
+                    <Box>
+                      <b>Symbol:</b> ${tokenDataObjects[i]?.symbol}&nbsp;
+                    </Box>
+                    <Box>
+                      <b>Balance:</b>&nbsp;
+                      {Utils.formatUnits(
+                        e.tokenBalance,
+                        tokenDataObjects[i].decimals
+                      )}
+                    </Box>
+                    <Image src={tokenDataObjects[i].logo} />
+                  </Flex>
+                );
+              })}
+            </SimpleGrid>
+          ) : (
+            'Please make a query! This may take a few seconds...'
+          )}
         </Flex>
-      </Center>
-      <Flex
-        w='100%'
-        flexDirection='column'
-        alignItems='center'
-        justifyContent={'center'}
-      >
-        <Heading mt={42}>
-          Get all the ERC-20 token balances of this address:
-        </Heading>
-        <Input
-          onChange={(e) => setUserAddress(e.target.value)}
-          color='black'
-          w='600px'
-          textAlign='center'
-          p={4}
-          bgColor='white'
-          fontSize={24}
-        />
-        <Button fontSize={20} onClick={getTokenBalance} mt={36} bgColor='blue'>
-          Check ERC-20 Token Balances
-        </Button>
-
-        <Heading my={36}>ERC-20 token balances:</Heading>
-
-        {hasQueried ? (
-          <SimpleGrid w={'90vw'} columns={4} spacing={24}>
-            {results.tokenBalances.map((e, i) => {
-              return (
-                <Flex
-                  flexDir={'column'}
-                  color='white'
-                  bg='blue'
-                  w={'20vw'}
-                  key={i}
-                >
-                  <Box>
-                    <b>Symbol:</b> ${tokenDataObjects[i]?.symbol}&nbsp;
-                  </Box>
-                  <Box>
-                    <b>Balance:</b>&nbsp;
-                    {Utils.formatUnits(
-                      e.tokenBalance,
-                      tokenDataObjects[i].decimals
-                    )}
-                  </Box>
-                  <Image src={tokenDataObjects[i].logo} />
-                </Flex>
-              );
-            })}
-          </SimpleGrid>
-        ) : (
-          'Please make a query! This may take a few seconds...'
-        )}
-      </Flex>
-    </Box>
+      </Box> */}
+    </>
   );
 }
 
